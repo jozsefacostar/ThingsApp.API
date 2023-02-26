@@ -10,43 +10,32 @@ namespace Things.DDD.API.Queries
     public class SessionBetQueries
     {
         #region Varibles
-        private readonly IReadTeamRepository _teamRepository;
+        private readonly IReadSessionBetRepository _IReadSessionBetRepository;
         #endregion
 
         #region Ctor
-        public SessionBetQueries(IReadTeamRepository teamRepository)
+        public SessionBetQueries(IReadSessionBetRepository IReadSessionBetRepository)
         {
-            _teamRepository = teamRepository;
+            _IReadSessionBetRepository = IReadSessionBetRepository;
         }
         #endregion
 
         #region Public Methods
-        /* Query de consulta para todos los equipos */
-        public async Task<PetitionResponse> GetAll()
+        /* Query de consulta para una sesión por su código */
+        public async Task<PetitionResponse> GetSessionBetByCode(string code)
         {
             try
             {
-                var result = await _teamRepository.GetAll();
-                return new PetitionResponse { success = true, message = "Equipos consultados con éxito", module = "Team", result = result };
+                var result = await _IReadSessionBetRepository.GetSessionBetByCode(code);
+                if (result.Equals(Guid.Empty))
+                    return new PetitionResponse { success = false, message = "No se encuentra la sesión con el código indicado", module = "SessionBet", result = result };
+                else
+                    return new PetitionResponse { success = true, message = "Sesión consultada con éxito", module = "SessionBet", result = result };
             }
             catch (Exception ex)
             {
-                return new PetitionResponse { success = false, message = "No es posible consultar: " + ex.StackTrace, module = "Team" };
+                return new PetitionResponse { success = false, message = "No es posible consultar sesión: " + ex.StackTrace, module = "Team" };
             }
-        }
-        /* Query de consulta para ID de equipo */
-        public async Task<PetitionResponse> GetByID(Guid id)
-        {
-            try
-            {
-                var result = await _teamRepository.GetByID(id);
-                return new PetitionResponse { success = true, message = "Equipo consultado con éxito", module = "Team", result = result };
-            }
-            catch (Exception ex)
-            {
-                return new PetitionResponse { success = false, message = "No es posible consultar: " + ex.StackTrace, module = "Team" };
-            }
-
         }
         #endregion
 

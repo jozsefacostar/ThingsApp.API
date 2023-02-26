@@ -15,12 +15,14 @@ namespace Things.DDD.API.Controllers
     {
         #region Variables
         private readonly IMediator _mediator;
+        private readonly SessionBetQueries _sessionBetQueries;
         #endregion
 
         #region Ctor
-        public SessionBetController(IMediator mediator)
+        public SessionBetController(IMediator mediator, SessionBetQueries sessionBetQueries)
         {
             _mediator = mediator;
+            _sessionBetQueries = sessionBetQueries;
         }
         #endregion
 
@@ -37,6 +39,20 @@ namespace Things.DDD.API.Controllers
         public async Task<PetitionResponse> Create(SessionBetCreateCommand SessionBetCreateCommand)
         {
             return await _mediator.Send(SessionBetCreateCommand);
+        }
+
+        /// <summary>
+        /// Función que consulta una sesión a partir del código.
+        /// </summary>        
+        /// <param name = "id" > Cpodigo de la sesión</param>
+        /// <returns>Resultado de la petición</returns>
+        /// <author>Jozsef Acosta</author>
+        [HttpGet("{code}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<PetitionResponse> GetSessionBetByCode(string code)
+        {
+            return await _sessionBetQueries.GetSessionBetByCode(code);
         }
         #endregion
     }

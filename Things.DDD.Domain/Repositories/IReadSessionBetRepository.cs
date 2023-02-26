@@ -9,9 +9,7 @@ using Things.DDD.Domain.Entities;
 namespace Things.DDD.Domain.Repositories
 {
     public interface IReadSessionBetRepository
-
     {
-        Task<List<TeamDTO>> GetAll();
-        Task<TeamDTO> GetByID(Guid id);
+        Task<Guid> GetSessionBetByCode(string Code);
     }
 }

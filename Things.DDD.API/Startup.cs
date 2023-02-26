@@ -54,8 +54,10 @@ namespace Things.DDD.API
             /* Inyección de dependencias de servicios e interfaces */
             services.AddScoped<IReadTeamRepository, TeamRepository>();
             services.AddScoped<IReadGameRepository, GameRepository>();
+            services.AddScoped<IReadSessionBetRepository, SessionBetRepository>();
             services.AddScoped<TeamQueries>();
             services.AddScoped<GameQueries>();
+            services.AddScoped<SessionBetQueries>();
 
         }
 
