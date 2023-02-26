@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.17">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -15,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Service.Common.Response\Service.Common.Response.csproj" />
+    <ProjectReference Include="..\Things.DDD.EventHandler\Things.DDD.EventHandler.csproj" />
     <ProjectReference Include="..\Things.DDD.Infraestructure\Things.DDD.Infrastructure.csproj" />
   </ItemGroup>
 

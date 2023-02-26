@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Service.Common.Response;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Things.DDD.Domain.DTOs;
-using Things.DDD.Domain.Entities;
 using Things.DDD.Domain.Repositories;
 
 namespace Things.DDD.API.Queries
@@ -23,14 +22,31 @@ namespace Things.DDD.API.Queries
 
         #region Public Methods
         /* Query de consulta para todos los equipos */
-        public async Task<List<TeamDTO>> GetAll()
+        public async Task<PetitionResponse> GetAll()
         {
-            return await _teamRepository.GetAll();
+            try
+            {
+                var result = await _teamRepository.GetAll();
+                return new PetitionResponse { success = true, message = "Equipos consultados con éxito", module = "Team", result = result };
+            }
+            catch (Exception ex)
+            {
+                return new PetitionResponse { success = false, message = "No es posible consultar: " + ex.StackTrace, module = "Team" };
+            }
         }
         /* Query de consulta para ID de equipo */
-        public async Task<TeamDTO> GetByID(Guid id)
+        public async Task<PetitionResponse> GetByID(Guid id)
         {
-            return await _teamRepository.GetByID(id);
+            try
+            {
+                var result = await _teamRepository.GetByID(id);
+                return new PetitionResponse { success = true, message = "Equipo consultado con éxito", module = "Team", result = result };
+            }
+            catch (Exception ex)
+            {
+                return new PetitionResponse { success = false, message = "No es posible consultar: " + ex.StackTrace, module = "Team" };
+            }
+
         }
         #endregion
 

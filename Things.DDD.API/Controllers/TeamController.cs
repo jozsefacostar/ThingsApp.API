@@ -2,11 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.Common.Response;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Things.DDD.Api.ApplicationServices;
-using Things.DDD.API.Commands;
+using Things.DDD.API.Queries;
 
 namespace Things.DDD.API.Controllers
 {
@@ -15,34 +12,27 @@ namespace Things.DDD.API.Controllers
     public class TeamController : ControllerBase
     {
         #region Variables
-        private readonly TeamServices _teamServices;
+        private readonly TeamQueries _teamQueries;
         #endregion
 
         #region Ctor
-        public TeamController(TeamServices teamServices)
+        public TeamController(TeamQueries teamServices)
         {
-            _teamServices = teamServices;
+            _teamQueries = teamServices;
         }
         #endregion
 
         #region APIs
-        [HttpPost]
-        //public async Task<PetitionResponse> Create(CreateTeamCommand create)
-        //{
-        //    await _teamServices.HandleCommand(create);
-        //    return Ok(create);
-        //}
-
         [HttpGet()]
         public async Task<PetitionResponse> GetAll()
         {
-            return await _teamServices.GetAll();
+            return await _teamQueries.GetAll();
         }
 
         [HttpGet("{id}")]
         public async Task<PetitionResponse> GetByID(Guid id)
         {
-            return await _teamServices.GetByID(id);
+            return await _teamQueries.GetByID(id);
         }
         #endregion
     }

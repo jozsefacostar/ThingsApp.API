@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,10 +12,11 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
-using Things.DDD.Api.ApplicationServices;
 using Things.DDD.API.Queries;
 using Things.DDD.Domain.Repositories;
+using Things.DDD.EventHandler.Games;
 using Things.DDD.Infrastructure;
 using Things.DDD.Infrastructure.Services;
 
@@ -43,10 +45,11 @@ namespace Things.DDD.API
               opts => opts.UseSqlServer(
                   Configuration.GetConnectionString("DefaultConnection")));
 
+            /* Inyección de MediaTr */
+            services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(GameCreateEventHandler).Assembly); });
+            /* Inyección de funcionalidads de Equipos */
             services.AddScoped<IReadTeamRepository, TeamRepository>();
-            services.AddScoped<IWriteTeamRepository, TeamRepository>();
             services.AddScoped<TeamQueries>();
-            services.AddScoped<TeamServices>();
 
         }
 

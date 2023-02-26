@@ -11,7 +11,7 @@ using Things.DDD.Domain.Repositories;
 
 namespace Things.DDD.Infrastructure.Services
 {
-    public class TeamRepository : IReadTeamRepository, IWriteTeamRepository
+    public class TeamRepository : IReadTeamRepository
     {
         #region Variables
         private readonly Context _context;
@@ -25,12 +25,6 @@ namespace Things.DDD.Infrastructure.Services
         #endregion
 
         #region Public Methods
-        /* Función que permite agregar un producto  */
-        public async Task Add(TeamDTO Team)
-        {
-            await _context.AddAsync(Team);
-            await _context.SaveChangesAsync();
-        }
         /* Función que permite consultar todos los equipos */
         public async Task<List<TeamDTO>> GetAll()
         {
