@@ -10,6 +10,6 @@ namespace Things.DDD.Domain.Repositories
 {
     public interface IReadSessionBetRepository
     {
-        Task<Guid> GetSessionBetByCode(string Code);
+        Task<dynamic> GetSessionBetByCode(string Code);
     }
 }

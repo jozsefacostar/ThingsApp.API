@@ -21,12 +21,24 @@ namespace Things.DDD.Infrastructure.Services
 
         #region Public Methods
         /* Función que permite consultar todos los equipos */
-        public async Task<Guid> GetSessionBetByCode(string code)
+        public async Task<dynamic> GetSessionBetByCode(string code)
         {
-            var sessionBet = (await _context.SessionBets.Where(x => x.Code.Equals(code)).FirstOrDefaultAsync());
-            if (sessionBet != null)
-                return sessionBet.ID;
-            return Guid.Empty;
+            return await _context.SessionBets
+                 .Include(x => x.GameNavigation)
+                 .Include(x => x.GameNavigation)
+                     .ThenInclude(x => x.TeamANavigation)
+                 .Include(x => x.GameNavigation)
+                     .ThenInclude(x => x.TeamBNavigation)
+                 .Where(x => x.Code.Equals(code))
+                 .Select(x => new
+                 {
+                     SessionBet = x.ID,
+                     TeamA = x.GameNavigation.TeamANavigation.Description,
+                     TeamB = x.GameNavigation.TeamBNavigation.Description,
+                     Game = x.Game,
+                     DateInitial = x.GameNavigation.DateInitial,
+                     DateFinal = x.GameNavigation.DateFinal
+                 }).FirstOrDefaultAsync();
         }
         #endregion
     }

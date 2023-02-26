@@ -27,8 +27,8 @@ namespace Things.DDD.API.Queries
             try
             {
                 var result = await _IReadSessionBetRepository.GetSessionBetByCode(code);
-                if (result.Equals(Guid.Empty))
-                    return new PetitionResponse { success = false, message = "No se encuentra la sesión con el código indicado", module = "SessionBet", result = result };
+                if (result == null)
+                    return new PetitionResponse { success = false, message = "No se encuentra la sesión con el código indicado", module = "SessionBet" };
                 else
                     return new PetitionResponse { success = true, message = "Sesión consultada con éxito", module = "SessionBet", result = result };
             }

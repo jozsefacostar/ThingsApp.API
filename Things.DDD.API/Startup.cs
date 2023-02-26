@@ -14,9 +14,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Things.DDD.API.HostedService;
 using Things.DDD.API.Queries;
 using Things.DDD.Domain.Repositories;
 using Things.DDD.EventHandler.Games;
+using Things.DDD.EventHandler.RecordBet;
 using Things.DDD.EventHandler.SessionBet;
 using Things.DDD.Infrastructure;
 using Things.DDD.Infrastructure.Services;
@@ -50,6 +52,8 @@ namespace Things.DDD.API
             services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(GameCreateEventHandler).Assembly); });
             services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(ScoresChangeEventHandler).Assembly); });
             services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(SessionBetCreateEventHandler).Assembly); });
+            services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(RecordBetCreateEventHandler).Assembly); });
+            services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(RecordBetUpdateEventHandler).Assembly); });
 
             /* Inyección de dependencias de servicios e interfaces */
             services.AddScoped<IReadTeamRepository, TeamRepository>();
@@ -58,6 +62,9 @@ namespace Things.DDD.API
             services.AddScoped<TeamQueries>();
             services.AddScoped<GameQueries>();
             services.AddScoped<SessionBetQueries>();
+
+            /* Inyección de Hosted Services */
+            services.AddHostedService<IntervalTaskHostedService>();
 
         }
 
