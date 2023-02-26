@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Common.Response;
 using System.Threading.Tasks;
+using Things.DDD.API.Queries;
 using Things.DDD.EventHandler.Commands.Game;
 
 namespace Things.DDD.API.Controllers
@@ -13,16 +14,32 @@ namespace Things.DDD.API.Controllers
     {
         #region Variables
         private readonly IMediator _mediator;
+        private readonly GameQueries _gameQueries;
         #endregion
 
         #region Ctor
-        public GameController(IMediator mediator)
+        public GameController(IMediator mediator, GameQueries gameQueries)
         {
             _mediator = mediator;
+            _gameQueries = gameQueries;
         }
         #endregion
 
         #region APIs
+
+        /// <summary>
+        /// Función que consulta todos los partidos por un estado.
+        /// </summary>        
+        /// <returns>Resultado de la petición</returns>
+        /// <author>Jozsef Acosta</author>
+        [HttpGet("{Finalized}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<PetitionResponse> GetAllByStatus(bool Finalized)
+        {
+            return await _gameQueries.GetAllByStatus(Finalized);
+        }
+
         /// <summary>
         /// Función que crea un partido.
         /// </summary>        

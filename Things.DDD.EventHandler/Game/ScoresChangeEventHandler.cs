@@ -47,7 +47,7 @@ namespace Things.DDD.EventHandler.Games
             }
             catch (Exception ex)
             {
-                return new PetitionResponse { success = false, message = "Excepcion: " + ex.Message, module = "Games" };
+                return new PetitionResponse { success = false, message = "No es posible modificar marcadores: " + ex.Message, module = "Games" };
             }
         }
     }

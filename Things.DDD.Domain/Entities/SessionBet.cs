@@ -29,7 +29,7 @@ namespace Things.DDD.Domain.Entities
 
         /* Variable que indica el codigo de sesión. */
         [Required]
-        [StringLength(30, ErrorMessage = "La longitud máxima del código de sesión es 50")]
+        [StringLength(50, ErrorMessage = "La longitud máxima del código de sesión es 50")]
         public string Code { get; set; }
 
         /* Variable que indica la descripción del sesión. */

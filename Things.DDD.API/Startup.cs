@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using Things.DDD.API.Queries;
 using Things.DDD.Domain.Repositories;
 using Things.DDD.EventHandler.Games;
+using Things.DDD.EventHandler.SessionBet;
 using Things.DDD.Infrastructure;
 using Things.DDD.Infrastructure.Services;
 
@@ -48,10 +49,13 @@ namespace Things.DDD.API
             /* Inyección de MediaTr */
             services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(GameCreateEventHandler).Assembly); });
             services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(ScoresChangeEventHandler).Assembly); });
+            services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(SessionBetCreateEventHandler).Assembly); });
 
-            /* Inyección de funcionalidads de Equipos */
+            /* Inyección de dependencias de servicios e interfaces */
             services.AddScoped<IReadTeamRepository, TeamRepository>();
+            services.AddScoped<IReadGameRepository, GameRepository>();
             services.AddScoped<TeamQueries>();
+            services.AddScoped<GameQueries>();
 
         }
 

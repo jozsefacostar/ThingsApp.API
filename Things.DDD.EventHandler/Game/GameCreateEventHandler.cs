@@ -37,13 +37,13 @@ namespace Things.DDD.EventHandler.Games
                 if (!await _gameValidator.IsTodayGame(notification.DateInitial))
                     return new PetitionResponse { success = false, message = _gameValidator.Message, module = "Games" };
 
-                await _context.AddAsync(new Game() { ID = Guid.NewGuid(), TeamA = notification.TeamA, TeamB = notification.TeamB, GoalsA = 0, GoalsB = 0, CreatedAt = DateTime.Now, CreatedBy = "MANAGER", DateInitial = notification.DateInitial, DateFinal = notification.DateInitial.AddHours(2) });
+                await _context.AddAsync(new Game() { ID = Guid.NewGuid(), TeamA = notification.TeamA, TeamB = notification.TeamB, GoalsA = 0, GoalsB = 0, Inactive = false, CreatedAt = DateTime.Now, CreatedBy = "MANAGER", DateInitial = notification.DateInitial, DateFinal = notification.DateInitial.AddHours(2) });
                 await _context.SaveChangesAsync();
                 return new PetitionResponse { success = true, message = "Partido creado con éxito", module = "Games" };
             }
             catch (Exception ex)
             {
-                return new PetitionResponse { success = false, message = "Excepcion: " + ex.Message, module = "Games" };
+                return new PetitionResponse { success = false, message = "No es posible crear partido: " + ex.Message, module = "Games" };
             }
         }
     }
