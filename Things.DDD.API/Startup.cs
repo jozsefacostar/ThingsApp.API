@@ -47,6 +47,8 @@ namespace Things.DDD.API
 
             /* Inyección de MediaTr */
             services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(GameCreateEventHandler).Assembly); });
+            services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(ScoresChangeEventHandler).Assembly); });
+
             /* Inyección de funcionalidads de Equipos */
             services.AddScoped<IReadTeamRepository, TeamRepository>();
             services.AddScoped<TeamQueries>();

@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace Things.DDD.EventHandler.Commands.Game
 {
-    public class GameCreateCommand: IRequest<PetitionResponse>
+    public class ScoresChangeCommand : IRequest<PetitionResponse>
     {
-        public Guid TeamA { get; set; }
-        public Guid TeamB { get; set; }
-        public DateTime DateInitial { get; set; }
+        public Guid ID { get; set; }
+        public int GoalsA { get; set; }
+        public int GoalsB { get; set; }
+        public bool Finalized { get; set; }
     }
 }

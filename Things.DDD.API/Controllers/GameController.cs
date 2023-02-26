@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Common.Response;
 using System.Threading.Tasks;
@@ -23,15 +24,29 @@ namespace Things.DDD.API.Controllers
 
         #region APIs
         /// <summary>
-        /// Función que crea partido por un administrador.
+        /// Función que crea un partido.
         /// </summary>        
-        /// <param name = "GameCreateCommand" > Objeto que crea partido</param>
+        /// <param name = "GameCreateCommand" > Objeto que contiene variables para crear partido</param>
         /// <returns>Resultado de la petición</returns>
         /// <author>Jozsef Acosta</author>
         [HttpPost()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<PetitionResponse> Create(GameCreateCommand GameCreateCommand)
         {
             return await _mediator.Send(GameCreateCommand);
+        }
+
+        /// <summary>
+        /// Función que actualiza los marcadores de un partido.
+        /// </summary>        
+        /// <param name = "ScoresChangeCommand" > Objeto que contiene varibles para actualizar partido</param>
+        /// <returns>Resultado de la petición</returns>
+        /// <author>Jozsef Acosta</author>
+        [HttpPut]
+        public async Task<PetitionResponse> UpdateScores(ScoresChangeCommand ScoresChangeCommand)
+        {
+            return await _mediator.Send(ScoresChangeCommand);
         }
         #endregion
     }

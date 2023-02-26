@@ -37,8 +37,11 @@ namespace Things.DDD.Domain.Entities
         [StringLength(200, ErrorMessage = "La longitud máxima de la descrición del partido es  200")]
         public int GoalsB { get; set; }
 
-        /* Variable que indica la fecha en la que se jugará el partido. */
-        public DateTime DateGame { get; set; } = new DateTime();
+        /* Variable que indica la fecha en la que inicia el partido. */
+        public DateTime DateInitial { get; set; } = new DateTime();
+
+        /* Variable que indica la fecha en la que finaliza el partido. */
+        public DateTime DateFinal { get; set; } = new DateTime();
 
         /* Variable que indica si el partido ha finalizado. */
         public bool Finalized { get; set; }
