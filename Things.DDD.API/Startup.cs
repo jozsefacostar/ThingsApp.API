@@ -61,9 +61,11 @@ namespace Things.DDD.API
             services.AddScoped<IReadTeamRepository, TeamRepository>();
             services.AddScoped<IReadGameRepository, GameRepository>();
             services.AddScoped<IReadSessionBetRepository, SessionBetRepository>();
+            services.AddScoped<IReadRecordBetRepository, RecordBetRepository>();
             services.AddScoped<TeamQueries>();
             services.AddScoped<GameQueries>();
             services.AddScoped<SessionBetQueries>();
+            services.AddScoped<RecordBetQueries>();
 
             /* Inyección de Hosted Services */
             //services.AddHostedService<IntervalTaskHostedService>();

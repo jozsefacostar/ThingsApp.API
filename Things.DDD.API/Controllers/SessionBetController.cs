@@ -28,6 +28,20 @@ namespace Things.DDD.API.Controllers
 
         #region APIs
         /// <summary>
+        /// Función que consulta una sesión a partir del código.
+        /// </summary>        
+        /// <param name = "id" > Cpodigo de la sesión</param>
+        /// <returns>Resultado de la petición</returns>
+        /// <author>Jozsef Acosta</author>
+        [HttpGet("{code}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<PetitionResponse> GetSessionBetByCode(string code)
+        {
+            return await _sessionBetQueries.GetSessionBetByCode(code);
+        }
+
+        /// <summary>
         /// Función que crea una sesión de partido.
         /// </summary>        
         /// <param name = "SessionBetCreateCommand" > Objeto que contiene variables para crear uan sesión de partido</param>
@@ -41,19 +55,7 @@ namespace Things.DDD.API.Controllers
             return await _mediator.Send(SessionBetCreateCommand);
         }
 
-        /// <summary>
-        /// Función que consulta una sesión a partir del código.
-        /// </summary>        
-        /// <param name = "id" > Cpodigo de la sesión</param>
-        /// <returns>Resultado de la petición</returns>
-        /// <author>Jozsef Acosta</author>
-        [HttpGet("{code}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<PetitionResponse> GetSessionBetByCode(string code)
-        {
-            return await _sessionBetQueries.GetSessionBetByCode(code);
-        }
+
         #endregion
     }
 }

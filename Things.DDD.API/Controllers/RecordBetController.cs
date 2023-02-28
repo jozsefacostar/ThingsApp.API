@@ -16,16 +16,33 @@ namespace Things.DDD.API.Controllers
     {
         #region Variables
         private readonly IMediator _mediator;
+        private readonly RecordBetQueries _RecordBetQueries;
         #endregion
 
         #region Ctor
-        public RecordBetController(IMediator mediator)
+        public RecordBetController(IMediator mediator, RecordBetQueries RecordBetQueries)
         {
             _mediator = mediator;
+            _RecordBetQueries = RecordBetQueries;
         }
         #endregion
 
         #region APIs
+
+        /// <summary>
+        /// Función que consulta las apuestas de un usuario.
+        /// </summary>        
+        /// <param name = "id" > Cpodigo de la sesión</param>
+        /// <returns>Resultado de la petición</returns>
+        /// <author>Jozsef Acosta</author>
+        [HttpGet("{user}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<PetitionResponse> GetSessionBetByCode(string user)
+        {
+            return await _RecordBetQueries.GetRecordsByUser(user);
+        }
+
         /// <summary>
         /// Función que crea una apuesta de partido.
         /// </summary>        
