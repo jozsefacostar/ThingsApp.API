@@ -28,7 +28,7 @@ namespace Things.DDD.Infrastructure.Services
         /* Función que permite consultar todos los equipos */
         public async Task<List<TeamDTO>> GetAll()
         {
-            return (await _context.Teams.ToListAsync()).MapTo<List<TeamDTO>>();
+            return (await _context.Teams.Where(x => !x.Inactive).ToListAsync()).MapTo<List<TeamDTO>>();
         }
         /* Función que permite consultar un equipo por ID */
         public async Task<TeamDTO> GetByID(Guid id)

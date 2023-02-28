@@ -36,6 +36,9 @@ namespace Things.DDD.EventHandler.Games
                 if (game == null)
                     return new PetitionResponse { success = false, message = "Partido indicado no existe", module = "Games" };
 
+                if (game.DateFinal < DateTime.Now)
+                    return new PetitionResponse { success = false, message = "El partido ya finalizo y no se pueden modificar marcadores", module = "Games" };
+
                 game.ModifyDate = DateTime.Now;
                 game.ModifiedBy = "MANAGER";
                 game.GoalsA = command.GoalsA;

@@ -10,7 +10,8 @@ namespace Things.DDD.Domain.Repositories
 {
     public interface IReadGameRepository
     {
-        Task<List<GameDTO>> GetAllByStatus(bool Finalized);
+        Task<dynamic> GetAllByStatus(bool Finalized);
+        Task<dynamic> GetAllForSession();
         Task<GameDTO> GetByID(Guid id);
     }
 }

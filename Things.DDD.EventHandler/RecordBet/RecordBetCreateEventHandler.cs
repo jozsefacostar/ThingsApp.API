@@ -35,6 +35,8 @@ namespace Things.DDD.EventHandler.RecordBet
                 _RecordBetValidator = new RecordBetValidator(_context);
                 if (!await _RecordBetValidator.CanCreateRecordBet(command.Game))
                     return new PetitionResponse { success = false, message = _RecordBetValidator.Message, module = "RecordBet" };
+                if (!await _RecordBetValidator.ValidateRepeatRecord(command))
+                    return new PetitionResponse { success = false, message = _RecordBetValidator.Message, module = "RecordBet" };
 
                 await _context.AddAsync(new Things.DDD.Domain.Entities.RecordBet() { ID = Guid.NewGuid(), SessionBet = command.SessionBet, User = command.User, GoalsA = command.GoalsA, GoalsB = command.GoalsB, Inactive = false, CreatedAt = DateTime.Now, CreatedBy = "MANAGER" });
                 await _context.SaveChangesAsync();

@@ -41,12 +41,25 @@ namespace Things.DDD.API.Controllers
         }
 
         /// <summary>
+        /// Función que consulta todos los partidos por un estado.
+        /// </summary>        
+        /// <returns>Resultado de la petición</returns>
+        /// <author>Jozsef Acosta</author>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<PetitionResponse> GetAllForSession()
+        {
+            return await _gameQueries.GetAllForSession();
+        }
+
+        /// <summary>
         /// Función que crea un partido.
         /// </summary>        
         /// <param name = "GameCreateCommand" > Objeto que contiene variables para crear partido</param>
         /// <returns>Resultado de la petición</returns>
         /// <author>Jozsef Acosta</author>
-        [HttpPost()]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<PetitionResponse> Create(GameCreateCommand GameCreateCommand)

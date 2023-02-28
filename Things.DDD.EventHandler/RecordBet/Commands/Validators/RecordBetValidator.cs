@@ -32,6 +32,18 @@ namespace Things.DDD.EventHandler.RecordBet.Commands.Validators
             Message = "Puede apostar sólo 5 minutos antes del partido";
             return false;
         }
+        /* Función que permite validar se puede apostar al partido indicado */
+        public async Task<bool> ValidateRepeatRecord(RecordBetCreateCommand command)
+        {
+            var DateNow = DateTime.Now;
+            var record = await _context.RecordBets.Where(x => x.SessionBet.Equals(command.SessionBet) && x.User.Equals(command.User)).FirstOrDefaultAsync();
+            if (record != null)
+            {
+                Message = "Sólo se permite una apuesta por sesión y por usuario";
+                return false;
+            }
+            return true;
+        }
         /* Función que permite validar se puede actualizar un partido ya existente */
         public async Task<bool> CanUpdateRecordBet(Guid RecordBet)
         {

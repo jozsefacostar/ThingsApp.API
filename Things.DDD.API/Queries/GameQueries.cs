@@ -34,6 +34,19 @@ namespace Things.DDD.API.Queries
                 return new PetitionResponse { success = false, message = "No es posible consultar: " + ex.StackTrace, module = "Game" };
             }
         }
+        /* Query de consulta para todos los partidos habilitados para crear una sesión */
+        public async Task<PetitionResponse> GetAllForSession()
+        {
+            try
+            {
+                var result = await _GameRepository.GetAllForSession();
+                return new PetitionResponse { success = true, message = "Partidos consultados con éxito", module = "Game", result = result };
+            }
+            catch (Exception ex)
+            {
+                return new PetitionResponse { success = false, message = "No es posible consultar: " + ex.StackTrace, module = "Game" };
+            }
+        }
         #endregion
 
     }

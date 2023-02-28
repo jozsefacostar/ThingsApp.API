@@ -22,9 +22,9 @@ namespace Things.DDD.API.HostedService
         #endregion
 
         #region Constructor
-        public IntervalTaskHostedService(IServiceScopeFactory scopeFactory)
+        public IntervalTaskHostedService(IServiceScopeFactory scopeFactory, Context context)
         {
-            _scopeFactory = scopeFactory;
+            //_scopeFactory = scopeFactory;
         }
         #endregion
 
@@ -32,17 +32,17 @@ namespace Things.DDD.API.HostedService
         /* Evento que se ejecutará en 2do plano cada 10 segundos para actualizar estado del partido */
         public void UpdateStatusGames(object state)
         {
-            using var scope = _scopeFactory.CreateScope();
-            var context = scope.ServiceProvider
-                .GetRequiredService<Context>();
+            //using var scope = _scopeFactory.CreateScope();
+            //var context = scope.ServiceProvider
+            //    .GetRequiredService<Context>();
 
-            List<Game> LstIQuerable = context.Games.Where(x => !x.Finalized && x.DateFinal < DateTime.Now).AsQueryable().ToList();
-            foreach (var drGame in LstIQuerable)
-            {
-                drGame.Finalized = true;
-                context.Entry(drGame).State = EntityState.Modified;
-                context.SaveChangesAsync();
-            }
+            //List<Game> LstIQuerable = context.Games.Where(x => !x.Finalized && x.DateFinal < DateTime.Now).AsQueryable().ToList();
+            //foreach (var drGame in LstIQuerable)
+            //{
+            //    drGame.Finalized = true;
+            //    context.Entry(drGame).State = EntityState.Modified;
+            //    context.SaveChangesAsync();
+            //}
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {

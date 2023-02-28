@@ -26,9 +26,48 @@ namespace Things.DDD.Infrastructure.Services
 
         #region Public Methods
         /* Función que permite consultar todos los partidos que no han finalizado y están pendientes por jugar */
-        public async Task<List<GameDTO>> GetAllByStatus(bool Finalized)
+        public async Task<dynamic> GetAllByStatus(bool Finalized)
         {
-            return (await _context.Games.Where(x=> x.Finalized == Finalized).ToListAsync()).MapTo<List<GameDTO>>();
+            return await _context.Games
+                .Include(x => x.TeamANavigation)
+                .Include(x => x.TeamBNavigation).Where(x => x.Finalized == Finalized)
+                .Select(
+                x => new
+                {
+                    TeamA = x.TeamANavigation.Description,
+                    TeamB = x.TeamBNavigation.Description,
+                    DateInitial = x.DateInitial,
+                    DateFinal = x.DateFinal,
+                    Finalized = x.Finalized,
+                    resultScore = "(" + x.GoalsA + ") - (" + x.GoalsB + ")",
+                    GoalsA = x.GoalsA,
+                    GoalsB = x.GoalsB,
+                    ID = x.ID
+                })
+                .OrderByDescending(x => x.DateInitial)
+                .ToListAsync();
+        }
+        /* Función que permite consultar todos los partidos que no han finalizado y están pendientes por jugar */
+        public async Task<dynamic> GetAllForSession()
+        {
+            return await _context.Games
+                .Include(x => x.TeamANavigation)
+                .Include(x => x.TeamBNavigation).Where(x => x.Finalized == false && x.DateInitial > DateTime.Now)
+                .Select(
+                x => new
+                {
+                    TeamA = x.TeamANavigation.Description,
+                    TeamB = x.TeamBNavigation.Description,
+                    DateInitial = x.DateInitial,
+                    DateFinal = x.DateFinal,
+                    Finalized = x.Finalized,
+                    resultScore = "(" + x.GoalsA + ") - (" + x.GoalsB + ")",
+                    GoalsA = x.GoalsA,
+                    GoalsB = x.GoalsB,
+                    ID = x.ID
+                })
+                .OrderByDescending(x => x.DateInitial)
+                .ToListAsync();
         }
         /* Función que permite consultar un partido por ID */
         public async Task<GameDTO> GetByID(Guid id)

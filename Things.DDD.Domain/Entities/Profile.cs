@@ -22,8 +22,14 @@ namespace Things.DDD.Domain.Entities
         public Guid ID { get; set; }
 
         /* Variable que indica la descripción de la perfil. */
+        [Required]
         [StringLength(50, ErrorMessage = "La longitud máxima de la descrición del perfil es  50")]
         public string Name { get; set; }
+
+        /* Variable que indica el codigo del perfil. */
+        [Required]
+        [StringLength(50, ErrorMessage = "La longitud máxima del codigo del perfil es  50")]
+        public string Code { get; set; }
 
         /* Colección de usuarios desde Perfil */
         public virtual ICollection<User> Users { get; set; }

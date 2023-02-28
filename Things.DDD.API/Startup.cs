@@ -20,6 +20,7 @@ using Things.DDD.Domain.Repositories;
 using Things.DDD.EventHandler.Games;
 using Things.DDD.EventHandler.RecordBet;
 using Things.DDD.EventHandler.SessionBet;
+using Things.DDD.EventHandler.User;
 using Things.DDD.Infrastructure;
 using Things.DDD.Infrastructure.Services;
 
@@ -53,7 +54,8 @@ namespace Things.DDD.API
             services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(ScoresChangeEventHandler).Assembly); });
             services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(SessionBetCreateEventHandler).Assembly); });
             services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(RecordBetCreateEventHandler).Assembly); });
-            services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(RecordBetUpdateEventHandler).Assembly); });
+            services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(UserLoginEventHandler).Assembly); });
+            services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(Startup).Assembly, typeof(UserLogoutEventHandler).Assembly); });
 
             /* Inyección de dependencias de servicios e interfaces */
             services.AddScoped<IReadTeamRepository, TeamRepository>();
@@ -64,7 +66,7 @@ namespace Things.DDD.API
             services.AddScoped<SessionBetQueries>();
 
             /* Inyección de Hosted Services */
-            services.AddHostedService<IntervalTaskHostedService>();
+            //services.AddHostedService<IntervalTaskHostedService>();
 
         }
 
