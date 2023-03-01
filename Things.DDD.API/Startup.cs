@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,10 +16,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Things.DDD.API.HostedService;
+using Things.DDD.API.Extension;
+using Things.DDD.API.HubConfig;
 using Things.DDD.API.Queries;
+using Things.DDD.API.TimerFeatures;
 using Things.DDD.Domain.Repositories;
 using Things.DDD.EventHandler.Games;
+using Things.DDD.EventHandler.HubConfig;
 using Things.DDD.EventHandler.RecordBet;
 using Things.DDD.EventHandler.SessionBet;
 using Things.DDD.EventHandler.User;
@@ -38,6 +43,19 @@ namespace Things.DDD.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /* Configuración de HangFire */
+            services.ConfigureHangFire(Configuration);
+
+            /* Inyectamos los CORS */
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", builder => builder
+                 .WithOrigins("http://localhost:4200")
+                 .AllowAnyMethod()
+                 .AllowAnyHeader()
+                 .AllowCredentials());
+            });
+            services.AddSignalR();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -67,13 +85,14 @@ namespace Things.DDD.API
             services.AddScoped<SessionBetQueries>();
             services.AddScoped<RecordBetQueries>();
 
-            /* Inyección de Hosted Services */
-            services.AddHostedService<IntervalTaskHostedService>();
+            /* Inyección de SignalR */
+            services.AddSingleton<TimerManager>();
+
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -84,11 +103,7 @@ namespace Things.DDD.API
 
             app.UseHttpsRedirection();
 
-            app.UseCors(x => x
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
-
+            app.UseCors("CorsPolicy");
 
             app.UseRouting();
 
@@ -97,7 +112,18 @@ namespace Things.DDD.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
+                endpoints.MapHub<ChartHub>("/chart");
+                endpoints.MapHub<AddGameHub>("/gameAdds");
             });
+
+            app.UseHangfireDashboard();
+
+            /* Implementamos el Midleware Firebase */
+            backgroundJobClient.Enqueue(() => Console.WriteLine("Hello"));
+            var scheduleGamesFinalized = serviceProvider.GetRequiredService<GameQueries>();
+            recurringJobManager.AddOrUpdate("Actualizar partidos finalizados", () => scheduleGamesFinalized.FinalizedGames(), Cron.Minutely);
+
         }
     }
 }

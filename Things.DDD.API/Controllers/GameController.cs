@@ -64,6 +64,7 @@ namespace Things.DDD.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<PetitionResponse> Create(GameCreateCommand GameCreateCommand)
         {
+
             return await _mediator.Send(GameCreateCommand);
         }
 

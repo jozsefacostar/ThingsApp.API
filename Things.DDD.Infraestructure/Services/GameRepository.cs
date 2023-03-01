@@ -75,9 +75,11 @@ namespace Things.DDD.Infrastructure.Services
             return (await _context.Games.Where(x => x.ID == id).FirstOrDefaultAsync()).MapTo<GameDTO>();
         }
         /* Función que permite consultar todos los partidos que no han finalizado y están pendientes por jugar */
-        public async Task<bool> FinalizedGames()
+        public async Task<List<dynamic>> FinalizedGames()
         {
             var games = await _context.Games.Where(x => x.Finalized == false).ToListAsync();
+            var gamesFinalized = new List<dynamic>();
+            bool FinGamesActualized = false;
             foreach (var drGame in games)
             {
                 if (drGame.DateFinal < DateTime.Now)
@@ -85,9 +87,11 @@ namespace Things.DDD.Infrastructure.Services
                     drGame.Finalized = true;
                     _context.Entry(drGame).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
+                    gamesFinalized.Add(drGame);
+                    FinGamesActualized = true;
                 }
             }
-            return true;
+            return FinGamesActualized ? gamesFinalized : null;
         }
         #endregion
     }

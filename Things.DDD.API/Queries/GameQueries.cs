@@ -53,7 +53,7 @@ namespace Things.DDD.API.Queries
             try
             {
                 var result = await _GameRepository.FinalizedGames();
-                return new PetitionResponse { success = true, message = "Partidos consultados con éxito", module = "Game", result = result };
+                return new PetitionResponse { success = true, message = (result == null ? "No hay partidos para actualizar" : "Partidos actualizados con éxito"), module = "Game", result = result };
             }
             catch (Exception ex)
             {

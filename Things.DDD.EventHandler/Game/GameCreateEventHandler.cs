@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Service.Common.Response;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using Things.DDD.Domain.Entities;
 using Things.DDD.EventHandler.Commands.Game;
 using Things.DDD.EventHandler.Commands.Game.Validators;
+using Things.DDD.EventHandler.HubConfig;
 using Things.DDD.Infrastructure;
 
 namespace Things.DDD.EventHandler.Games
@@ -18,11 +20,13 @@ namespace Things.DDD.EventHandler.Games
     {
         private readonly Context _context;
         private GameValidators _gameValidator;
+        private readonly IHubContext<AddGameHub> _hub;
 
         /* Constructor */
-        public GameCreateEventHandler(Context context)
+        public GameCreateEventHandler(Context context, IHubContext<AddGameHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         /* Función que ejecuta el comando indicado */
@@ -39,6 +43,7 @@ namespace Things.DDD.EventHandler.Games
 
                 await _context.AddAsync(new Game() { ID = Guid.NewGuid(), TeamA = notification.TeamA, TeamB = notification.TeamB, GoalsA = 0, GoalsB = 0, Inactive = false, CreatedAt = DateTime.Now, CreatedBy = "MANAGER", DateInitial = notification.DateInitial, DateFinal = notification.DateInitial.AddHours(2) });
                 await _context.SaveChangesAsync();
+                await _hub.Clients.All.SendAsync("TransferAddGameData", notification);
                 return new PetitionResponse { success = true, message = "Partido creado con éxito", module = "Games" };
             }
             catch (Exception ex)
