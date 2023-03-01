@@ -47,6 +47,19 @@ namespace Things.DDD.API.Queries
                 return new PetitionResponse { success = false, message = "No es posible consultar: " + ex.StackTrace, module = "Game" };
             }
         }
+        /* Query que actualiza estado de los partidos automaticamente */
+        public async Task<PetitionResponse> FinalizedGames()
+        {
+            try
+            {
+                var result = await _GameRepository.FinalizedGames();
+                return new PetitionResponse { success = true, message = "Partidos consultados con éxito", module = "Game", result = result };
+            }
+            catch (Exception ex)
+            {
+                return new PetitionResponse { success = false, message = "No es posible consultar: " + ex.StackTrace, module = "Game" };
+            }
+        }
         #endregion
 
     }

@@ -13,5 +13,6 @@ namespace Things.DDD.Domain.Repositories
         Task<dynamic> GetAllByStatus(bool Finalized);
         Task<dynamic> GetAllForSession();
         Task<GameDTO> GetByID(Guid id);
+        Task<bool> FinalizedGames();
     }
 }

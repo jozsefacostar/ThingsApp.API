@@ -68,7 +68,7 @@ namespace Things.DDD.API
             services.AddScoped<RecordBetQueries>();
 
             /* Inyección de Hosted Services */
-            //services.AddHostedService<IntervalTaskHostedService>();
+            services.AddHostedService<IntervalTaskHostedService>();
 
         }
 
@@ -83,6 +83,12 @@ namespace Things.DDD.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
 
             app.UseRouting();
 

@@ -42,6 +42,7 @@ namespace Things.DDD.Infrastructure.Services
                      DateInitial = x.SessionBetNavigation.GameNavigation.DateInitial,
                      DateFinal = x.SessionBetNavigation.GameNavigation.DateFinal,
                      Finalized = x.SessionBetNavigation.GameNavigation.Finalized,
+                     StatusGame = x.SessionBetNavigation.GameNavigation.Finalized ? "0" : x.SessionBetNavigation.GameNavigation.DateInitial < DateTime.Now && x.SessionBetNavigation.GameNavigation.DateFinal > DateTime.Now ? "1" : x.SessionBetNavigation.GameNavigation.DateInitial > DateTime.Now ? "2" : "3",
                      myScore = "(" + x.GoalsA + ") - (" + x.GoalsB + ")",
                      realScore = "(" + x.SessionBetNavigation.GameNavigation.GoalsA + ") - (" + x.SessionBetNavigation.GameNavigation.GoalsB + ")"
                  }).ToListAsync();
