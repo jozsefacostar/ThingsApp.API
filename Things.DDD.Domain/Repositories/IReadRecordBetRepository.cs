@@ -9,6 +9,7 @@ namespace Things.DDD.Domain.Repositories
     public interface IReadRecordBetRepository
     {
         Task<dynamic> GetRecordsByUser(string User);
+        Task<dynamic> GetRecordsBySession(string SessionBet);
     }
 }
 

@@ -37,6 +37,21 @@ namespace Things.DDD.API.Queries
                 return new PetitionResponse { success = false, message = "No es posible consultar Apuesta: " + ex.StackTrace, module = "Team" };
             }
         }
+        /* Query de consulta para una Apuesta por su código */
+        public async Task<PetitionResponse> GetRecordBySession(string SessionBet)
+        {
+            try
+            {
+                var result = await _IReadRecordBetRepository.GetRecordsBySession(SessionBet);
+                if (result == null)
+                    return new PetitionResponse { success = false, message = "Aún no hay apuestas para la sección seleccionada", module = "RecordBet", result = result };
+                return new PetitionResponse { success = true, message = "Apuestas consultadas con éxito", module = "RecordBet", result = result };
+            }
+            catch (Exception ex)
+            {
+                return new PetitionResponse { success = false, message = "No es posible consultar Apuestas: " + ex.StackTrace, module = "RecordBet" };
+            }
+        }
         #endregion
 
     }

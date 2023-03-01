@@ -32,15 +32,29 @@ namespace Things.DDD.API.Controllers
         /// <summary>
         /// Función que consulta las apuestas de un usuario.
         /// </summary>        
-        /// <param name = "id" > Cpodigo de la sesión</param>
+        /// <param name = "user" > Cpodigo de la sesión</param>
         /// <returns>Resultado de la petición</returns>
         /// <author>Jozsef Acosta</author>
-        [HttpGet("{user}")]
+        [HttpGet("GetRecordsByUser/{user}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<PetitionResponse> GetSessionBetByCode(string user)
+        public async Task<PetitionResponse> GetRecordsByUser(string user)
         {
             return await _RecordBetQueries.GetRecordsByUser(user);
+        }
+
+        /// <summary>
+        /// Función que consulta las apuestas de varios usuaios.
+        /// </summary>        
+        /// <param name = "sessionBet" > Cpodigo de la sesión</param>
+        /// <returns>Resultado de la petición</returns>
+        /// <author>Jozsef Acosta</author>
+        [HttpGet("GetRecordBySession/{sessionBet}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<PetitionResponse> GetRecordBySession(string sessionBet)
+        {
+            return await _RecordBetQueries.GetRecordBySession(sessionBet);
         }
 
         /// <summary>
