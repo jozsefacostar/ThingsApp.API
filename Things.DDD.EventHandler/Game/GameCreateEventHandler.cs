@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Service.Common.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,13 +49,34 @@ namespace Things.DDD.EventHandler.Games
 
                 var teamA = await _context.Teams.Where(x => x.ID.Equals(notification.TeamA)).FirstOrDefaultAsync();
                 var teamB = await _context.Teams.Where(x => x.ID.Equals(notification.TeamB)).FirstOrDefaultAsync();
-                var dateGame = "Partido creado: (" + teamA.Description + " VS " + teamB.Description+") "+ notification.DateInitial;
+
+                var dateGame = "Partido creado: (" + teamA.Description + " VS " + teamB.Description + ") " + notification.DateInitial;
                 await _hub.Clients.All.SendAsync("TransferAddGameData", dateGame);
+                await IntegrationMicroservicesHistory(notification);
+
                 return new PetitionResponse { success = true, message = "Partido creado con éxito", module = "Games" };
             }
             catch (Exception ex)
             {
                 return new PetitionResponse { success = false, message = "No es posible crear partido: " + ex.Message, module = "Games" };
+            }
+        }
+        /* Función que se comunica con microservicio de History */
+        private async Task IntegrationMicroservicesHistory(GameCreateCommand GameCreateCommand)
+        {
+            try
+            {
+                var json = JsonConvert.SerializeObject(GameCreateCommand);
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+                var url = "http://localhost:20945/api/GameHistory";
+                using var client = new HttpClient();
+                var response = await client.PostAsync(url, data);
+                var result = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                new PetitionResponse { success = false, message = "No es posible crear partido historico: " + ex.Message, module = "Games" };
             }
         }
     }
