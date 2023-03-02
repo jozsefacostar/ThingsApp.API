@@ -1,0 +1,9 @@
+ThingsApp es una app de apuestas en linea, que cuentas con todas validaciones descritas en el documento de requerimientos.
+
+Para subir el aplicativo seguir pasos:
+
+Backend
+Recompilar todas las soluciones y subir los microservicios al mismo tiempo.
+
+Front
+npm i para instalar dependencias y subir el proyecto para el comando ng serve

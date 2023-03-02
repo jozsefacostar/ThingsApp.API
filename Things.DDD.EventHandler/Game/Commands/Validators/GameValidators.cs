@@ -21,6 +21,12 @@ namespace Things.DDD.EventHandler.Commands.Game.Validators
         /* Función que permite validar cruces entre fechas de equipos */
         public async Task<bool> ExistDateCrossing(Guid TeamA, Guid TeamB, DateTime DateGame)
         {
+            if (DateGame <= DateTime.Now)
+            {
+                Message = "La fecha y hora del partido no puede ser menor a la actual";
+                return false;
+            }
+
             if (TeamA.Equals(TeamB))
             {
                 Message = "No hay suficientes jugadores del mismo equipo para que se enfrenten entre si";
