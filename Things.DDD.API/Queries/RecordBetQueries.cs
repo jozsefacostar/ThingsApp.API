@@ -52,6 +52,22 @@ namespace Things.DDD.API.Queries
                 return new PetitionResponse { success = false, message = "No es posible consultar Apuestas: " + ex.StackTrace, module = "RecordBet" };
             }
         }
+        /* Query de consulta para todas las apuestas relacionadas a un usuarios y sus sesiones*/
+        public async Task<PetitionResponse> GetRecordsByUserAndSession(string User)
+        {
+            try
+            {
+                var result = await _IReadRecordBetRepository.GetRecordsByUserAndSession(User);
+                if (result.Equals(Guid.Empty))
+                    return new PetitionResponse { success = false, message = "No se encuentra la Apuesta con el código indicado", module = "RecordBet", result = result };
+                else
+                    return new PetitionResponse { success = true, message = "Apuesta consultada con éxito", module = "RecordBet", result = result };
+            }
+            catch (Exception ex)
+            {
+                return new PetitionResponse { success = false, message = "No es posible consultar Apuesta: " + ex.StackTrace, module = "Team" };
+            }
+        }
         #endregion
 
     }

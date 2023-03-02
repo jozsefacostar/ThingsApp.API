@@ -10,6 +10,7 @@ namespace Things.DDD.Domain.Repositories
     {
         Task<dynamic> GetRecordsByUser(string User);
         Task<dynamic> GetRecordsBySession(string SessionBet);
+        Task<dynamic> GetRecordsByUserAndSession(string SessionBet);
     }
 }
 

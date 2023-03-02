@@ -58,6 +58,23 @@ namespace Things.DDD.API.Controllers
         }
 
         /// <summary>
+        /// Función que consulta las apuestas de los usuarios y sesiones.
+        /// </summary>        
+        /// <param name = "user" > Código de usuario</param>
+        /// <returns>Resultado de la petición</returns>
+        /// <author>Jozsef Acosta</author>
+        [HttpGet("GetRecordsByUserAndSession/{user}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<PetitionResponse> GetRecordsByUserAndSession(string user)
+        {
+            return await _RecordBetQueries.GetRecordsByUserAndSession(user);
+        }
+
+
+
+
+        /// <summary>
         /// Función que crea una apuesta de partido.
         /// </summary>        
         /// <param name = "RecordBetCreateCommand" > Objeto que contiene variables para crear una apuesta de partido</param>
