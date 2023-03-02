@@ -7,9 +7,9 @@ using Things.DDD.API.Models;
 
 namespace Things.DDD.API.HubConfig
 {
-    public class ChartHub : Hub
+    public class AllGamesSummary : Hub
     {
         public async Task BroadcastChartData(List<ChartModel> data) =>
-            await Clients.All.SendAsync("broadcastchartdata", data);
+            await Clients.All.SendAsync("broadcastallGamesdata", data);
     }
 }

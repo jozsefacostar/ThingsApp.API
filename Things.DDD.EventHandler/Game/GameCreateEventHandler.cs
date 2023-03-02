@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Service.Common.Response;
 using System;
 using System.Collections.Generic;
@@ -43,7 +44,11 @@ namespace Things.DDD.EventHandler.Games
 
                 await _context.AddAsync(new Game() { ID = Guid.NewGuid(), TeamA = notification.TeamA, TeamB = notification.TeamB, GoalsA = 0, GoalsB = 0, Inactive = false, CreatedAt = DateTime.Now, CreatedBy = "MANAGER", DateInitial = notification.DateInitial, DateFinal = notification.DateInitial.AddHours(2) });
                 await _context.SaveChangesAsync();
-                await _hub.Clients.All.SendAsync("TransferAddGameData", notification);
+
+                var teamA = await _context.Teams.Where(x => x.ID.Equals(notification.TeamA)).FirstOrDefaultAsync();
+                var teamB = await _context.Teams.Where(x => x.ID.Equals(notification.TeamB)).FirstOrDefaultAsync();
+                var dateGame = "Partido creado: (" + teamA.Description + " VS " + teamB.Description+") "+ notification.DateInitial;
+                await _hub.Clients.All.SendAsync("TransferAddGameData", dateGame);
                 return new PetitionResponse { success = true, message = "Partido creado con éxito", module = "Games" };
             }
             catch (Exception ex)

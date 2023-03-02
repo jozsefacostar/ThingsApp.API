@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Service.Common.Response;
 using System;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using Things.DDD.Domain.Entities;
 using Things.DDD.EventHandler.Commands.Game;
 using Things.DDD.EventHandler.Commands.Game.Validators;
+using Things.DDD.EventHandler.HubConfig;
 using Things.DDD.Infrastructure;
 
 namespace Things.DDD.EventHandler.Games
@@ -19,11 +21,13 @@ namespace Things.DDD.EventHandler.Games
     {
         private readonly Context _context;
         private GameValidators _gameValidator;
+        private readonly IHubContext<UpdateScoresGameHub> _hub;
 
         /* Constructor */
-        public ScoresChangeEventHandler(Context context)
+        public ScoresChangeEventHandler(Context context, IHubContext<UpdateScoresGameHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
 
         /* Función que ejecuta el comando indicado */
@@ -46,6 +50,14 @@ namespace Things.DDD.EventHandler.Games
                 game.Finalized = command.Finalized;
                 _context.Entry(game).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
+                var teamA = await _context.Teams.Where(x => x.ID.Equals(game.TeamA)).FirstOrDefaultAsync();
+                var teamB = await _context.Teams.Where(x => x.ID.Equals(game.TeamB)).FirstOrDefaultAsync();
+                var dateGame = "";
+                if (!command.Finalized)
+                    dateGame = "¡GOLLL! " + teamA.Description + "(" + command.GoalsA + ") - (" + command.GoalsB + ")" + teamB.Description;
+                else
+                    dateGame = "Partido finalizado: " + teamA.Description + "(" + command.GoalsA + ") - (" + command.GoalsB + ")" + teamB.Description;
+                await _hub.Clients.All.SendAsync("transfer", dateGame);
                 return new PetitionResponse { success = true, message = "Marcadores modificados con éxito", module = "Games" };
             }
             catch (Exception ex)
