@@ -17,9 +17,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Things.DDD.API.Extension;
-using Things.DDD.API.HubConfig;
 using Things.DDD.API.Queries;
-using Things.DDD.API.TimerFeatures;
 using Things.DDD.Domain.Repositories;
 using Things.DDD.EventHandler.Games;
 using Things.DDD.EventHandler.HubConfig;
@@ -84,11 +82,6 @@ namespace Things.DDD.API
             services.AddScoped<GameQueries>();
             services.AddScoped<SessionBetQueries>();
             services.AddScoped<RecordBetQueries>();
-
-            /* Inyección de SignalR */
-            services.AddSingleton<TimerManager>();
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

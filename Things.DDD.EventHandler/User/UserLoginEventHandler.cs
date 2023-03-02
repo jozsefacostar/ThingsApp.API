@@ -44,7 +44,7 @@ namespace Things.DDD.EventHandler.User
                 Persona1.ID = userLogin.ID;
                 Persona1.Name = userLogin.Name;
                 Persona1.ProfileCode = userLogin.ProfileNavigation.Code;
-                return new PetitionResponse { success = true, message = "Login exitoso", module = "Users", result = Persona1 };
+                return new PetitionResponse { success = true, message = "¡¡Bienvenid@ a la casa de apuestas!!", module = "Users", result = Persona1 };
             }
             catch (Exception ex)
             {

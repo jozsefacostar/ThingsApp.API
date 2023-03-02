@@ -22,12 +22,14 @@ namespace Things.DDD.EventHandler.Games
         private readonly Context _context;
         private GameValidators _gameValidator;
         private readonly IHubContext<UpdateScoresGameHub> _hub;
+        private readonly IHubContext<AllGamesSummary> _hub_AllGamesSummary;
 
         /* Constructor */
-        public ScoresChangeEventHandler(Context context, IHubContext<UpdateScoresGameHub> hub)
+        public ScoresChangeEventHandler(Context context, IHubContext<UpdateScoresGameHub> hub, IHubContext<AllGamesSummary> hub_AllGamesSummary)
         {
             _context = context;
             _hub = hub;
+            _hub_AllGamesSummary = hub_AllGamesSummary;
         }
 
         /* Función que ejecuta el comando indicado */
@@ -58,6 +60,7 @@ namespace Things.DDD.EventHandler.Games
                 else
                     dateGame = "Partido finalizado: " + teamA.Description + "(" + command.GoalsA + ") - (" + command.GoalsB + ")" + teamB.Description;
                 await _hub.Clients.All.SendAsync("transfer", dateGame);
+                await _hub_AllGamesSummary.Clients.All.SendAsync("AllGamesSummary", dateGame);
                 return new PetitionResponse { success = true, message = "Marcadores modificados con éxito", module = "Games" };
             }
             catch (Exception ex)

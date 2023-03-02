@@ -19,12 +19,14 @@ namespace Things.DDD.EventHandler.RecordBet
         private readonly Context _context;
         private RecordBetValidator _RecordBetValidator;
         private readonly IHubContext<RecordUpdateScoresGameHub> _hub;
+        private readonly IHubContext<AllGamesSummary> _hub_AllGamesSummary;
 
         /* Constructor */
-        public RecordBetUpdateEventHandler(Context context, IHubContext<RecordUpdateScoresGameHub> hub)
+        public RecordBetUpdateEventHandler(Context context, IHubContext<RecordUpdateScoresGameHub> hub, IHubContext<AllGamesSummary> hub_AllGamesSummary)
         {
             _context = context;
             _hub = hub;
+            _hub_AllGamesSummary = hub_AllGamesSummary;
         }
 
         /* Función que ejecuta el comando indicado */
@@ -58,6 +60,7 @@ namespace Things.DDD.EventHandler.RecordBet
                 var dateGame = _RecordBet.UserNavigation.Name +
                     " cambió su apuesta: (" + _RecordBet.SessionBetNavigation.GameNavigation.TeamANavigation.Description + "(" + command.GoalsA + ") - (" + command.GoalsB + ")" + _RecordBet.SessionBetNavigation.GameNavigation.TeamBNavigation.Description;
                 await _hub.Clients.All.SendAsync("UpdateScoresByUser", dateGame);
+                await _hub_AllGamesSummary.Clients.All.SendAsync("AllGamesSummary", dateGame);
                 return new PetitionResponse { success = true, message = "Apuesta modificada con éxito", module = "RecordBet" };
             }
             catch (Exception ex)
