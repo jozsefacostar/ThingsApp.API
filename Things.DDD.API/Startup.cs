@@ -110,6 +110,7 @@ namespace Things.DDD.API
                 endpoints.MapHub<AddGameHub>("/gameAdds");
                 endpoints.MapHub<UpdateScoresGameHub>("/updateScores");
                 endpoints.MapHub<RecordUpdateScoresGameHub>("/updateScoresByUser");
+                endpoints.MapHub<CreateRecordByUserHub>("/createRecordByUser");
             });
 
             app.UseHangfireDashboard();
